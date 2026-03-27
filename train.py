@@ -31,7 +31,7 @@ from model import GPT, BASE_CONFIG
 LEARNING_RATE = 6e-4        # Peak learning rate (increased from 3e-4 for faster convergence)
 MIN_LR = 6e-5               # Minimum learning rate for cosine schedule (2x of previous)
 WARMUP_STEPS = 200          # Warmup steps before cosine decay (increased for stability at higher LR)
-MAX_STEPS = 1000            # Total training steps per run
+MAX_STEPS = 2000            # Total training steps (doubled: 1000→2000, Run #7)
 BATCH_SIZE = 8              # Micro batch size
 GRAD_ACCUM_STEPS = 4        # Gradient accumulation steps (effective batch = 32)
 EVAL_INTERVAL = 200         # Evaluate every N steps
