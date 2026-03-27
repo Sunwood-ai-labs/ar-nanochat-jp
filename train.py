@@ -28,9 +28,9 @@ from model import GPT, BASE_CONFIG
 # Try changing these values and see if eval_loss improves.
 
 # Training hyperparameters
-LEARNING_RATE = 3e-4        # Peak learning rate
-MIN_LR = 3e-5               # Minimum learning rate for cosine schedule
-WARMUP_STEPS = 100          # Warmup steps before cosine decay
+LEARNING_RATE = 6e-4        # Peak learning rate (increased from 3e-4 for faster convergence)
+MIN_LR = 6e-5               # Minimum learning rate for cosine schedule (2x of previous)
+WARMUP_STEPS = 200          # Warmup steps before cosine decay (increased for stability at higher LR)
 MAX_STEPS = 1000            # Total training steps per run
 BATCH_SIZE = 8              # Micro batch size
 GRAD_ACCUM_STEPS = 4        # Gradient accumulation steps (effective batch = 32)
