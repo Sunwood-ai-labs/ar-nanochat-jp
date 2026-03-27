@@ -36,7 +36,7 @@ BATCH_SIZE = 8              # Micro batch size
 GRAD_ACCUM_STEPS = 4        # Gradient accumulation steps (effective batch = 32)
 EVAL_INTERVAL = 200         # Evaluate every N steps
 EVAL_STEPS = 50             # Steps for evaluation
-WEIGHT_DECAY = 0.1          # Weight decay for AdamW
+WEIGHT_DECAY = 0.05         # Weight decay for AdamW (reduced from 0.1, Run #3)
 BETA1 = 0.9                 # Adam beta1
 BETA2 = 0.95                # Adam beta2
 GRAD_CLIP = 1.0             # Gradient clipping
