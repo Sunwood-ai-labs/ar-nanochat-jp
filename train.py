@@ -46,6 +46,8 @@ MODEL_CONFIG = {
     **BASE_CONFIG,
     "block_size": 384,    # Increased from 256 for longer context (Run #2)
     "n_layers": 8,        # Deeper model: 6→8 layers (Run #4)
+    "n_embd": 448,        # Wider model: 384→448 (Run #5)
+    "n_heads": 7,         # Adjusted for n_embd=448 (448/7=64 head_dim)
 }
 
 # Paths
