@@ -32,20 +32,32 @@
 **Status**: ✅ IMPROVED - Committed
 **Note**: Model params increased to 26.57M
 
+## Run #6-7: Extended Training
+**Change**: MAX_STEPS 1000 -> 2000, GRAD_ACCUM_STEPS 4 -> 8
+**Result**: val_loss = 2.0509 (was 2.2115 at step 1000)
+**Status**: ✅ IMPROVED - Committed
+
+## Run #8: Reduce Dropout
+**Change**: dropout 0.1 -> 0.05
+**Result**: val_loss = 2.0270 (was 2.0509, -1.2%)
+**Status**: ✅ IMPROVED - Committed
+
 ## Summary
-- **Total improvement**: 2.4144 -> 2.0509 = **15.1% reduction in val_loss**
+- **Total improvement**: 2.4144 -> 2.0270 = **16.0% reduction in val_loss**
 - **Final config**:
   - LEARNING_RATE = 6e-4 (was 3e-4)
   - WARMUP_STEPS = 200 (was 100)
   - WEIGHT_DECAY = 0.05 (was 0.1)
   - MAX_STEPS = 2000 (was 1000)
+  - GRAD_ACCUM_STEPS = 8 (was 4)
   - block_size = 384 (was 256)
   - n_layers = 8 (was 6)
   - n_embd = 448 (was 384)
   - n_heads = 7 (was 6)
+  - dropout = 0.05 (was 0.1)
 - **Final model**: 26.57M params (was 14.86M)
-- **JP Perplexity**: 8.37 (down from ~11.2 at baseline)
-- **Composite score**: 2.72 (lower = better)
+- **JP Perplexity**: 8.06 (down from ~11.2 at baseline)
+- **Composite score**: 2.68 (lower = better)
 
 ## Progress Chart
 ```
