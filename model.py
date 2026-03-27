@@ -164,7 +164,7 @@ class GPT(nn.Module):
 
 # Default config for RTX 3060 6GB VRAM — lightweight Japanese model
 BASE_CONFIG = {
-    "vocab_size": 4096,
+    "vocab_size": 1553,
     "block_size": 256,
     "n_embd": 384,
     "n_heads": 6,
