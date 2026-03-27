@@ -20,6 +20,20 @@
 **Time**: 486s
 **Status**: ✅ IMPROVED (marginal) - Committed
 
-## Run #4-5: Wider Model (next)
+## Run #4-5: Wider Model (26.57M params)
 **Change**: n_embd 384 → 448, n_heads 6 → 7 (head_dim=64)
-**Status**: ⏳ Running...
+**Result**: val_loss = 2.2151 (-1.2% from Run #3)
+**Benchmark**: PPL=10.02, dist=0.67, rep=0.86, composite=2.89
+**Time**: 617s
+**Status**: ✅ IMPROVED - Committed
+
+## Progress Summary
+| Run | val_loss | Change | Params |
+|-----|----------|--------|--------|
+| Base | 2.4144 | - | 14.86M |
+| #1 | 2.2765 | LR ↑ | 14.86M |
+| #2 | 2.2587 | block_size ↑ | 14.86M |
+| #3 | 2.2428 | n_layers ↑ | 19.62M |
+| #5 | 2.2151 | n_embd ↑ | 26.57M |
+
+**Total improvement: -8.3% from baseline**
