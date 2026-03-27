@@ -45,7 +45,7 @@ GRAD_CLIP = 1.0             # Gradient clipping
 MODEL_CONFIG = {
     **BASE_CONFIG,
     "block_size": 384,    # Increased from 256 for longer context (Run #2)
-    "n_layers": 8,        # Deeper model: 6→8 layers (Run #3)
+    "n_layers": 8,        # Deeper model: 6→8 layers (Run #4)
 }
 
 # Paths
@@ -238,7 +238,21 @@ def train():
     print(f"Total time: {time.time() - t0:.1f}s")
     print(f"{'='*60}")
 
-    # Save final log (will be updated with benchmark results later)
+    final = {
+        "final_val_loss": val_loss,
+        "best_val_loss": best_val_loss,
+        "total_steps": step,
+        "total_time": time.time() - t0,
+        "config": MODEL_CONFIG,
+        "hyperparams": {
+            "lr": LEARNING_RATE,
+            "batch_size": BATCH_SIZE,
+            "grad_accum": GRAD_ACCUM_STEPS,
+            "warmup": WARMUP_STEPS,
+            "weight_decay": WEIGHT_DECAY,
+        },
+        "entries": log_entries,
+    }
 
     # ── Japanese Benchmark ──
     print(f"\n{'='*60}")
