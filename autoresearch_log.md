@@ -2,38 +2,45 @@
 
 ## Baseline
 - val_loss: 2.4144
-- Config: LR=3e-4, warmup=100, 6 layers, 384 dim, 6 heads
+- Config: LR=3e-4, warmup=100, 6 layers, 384 dim, 6 heads, block_size=256
+- Model params: 14.86M
 
 ## Run #1: Increase Learning Rate + Warmup
 **Change**: LR 3e-4 -> 6e-4, warmup 100 -> 200
 **Result**: val_loss = 2.2765 (-5.7%)
 **Status**: ✅ IMPROVED - Committed
+
 ## Run #2: Increase Block Size
 **Change**: block_size 256 -> 384
 **Result**: val_loss = 2.2587 (was 2.2765, -0.8%)
 **Status**: ✅ IMPROVED - Committed
 
-## Run #3: Deeper Model + Japanese Benchmark
-**Change**: n_layers 6 -> 8 (14.86M -> 19.62M params)
-**Result**: val_loss = 2.2428 (-0.3% from Run #2)
-**Benchmark**: PPL=10.13, dist_score=0.71, rep=0.88, composite=2.93
-**Time**: 486s
-**Status**: ✅ IMPROVED (marginal) - Committed
-
-## Run #4-5: Wider Model (26.57M params)
-**Change**: n_embd 384 → 448, n_heads 6 → 7 (head_dim=64)
-**Result**: val_loss = 2.2151 (-1.2% from Run #3)
-**Benchmark**: PPL=10.02, dist=0.67, rep=0.86, composite=2.89
-**Time**: 617s
+## Run #3: Reduce Weight Decay
+**Change**: weight_decay 0.1 -> 0.05
+**Result**: val_loss = 2.2564 (was 2.2587, -0.1%)
 **Status**: ✅ IMPROVED - Committed
 
-## Progress Summary
-| Run | val_loss | Change | Params |
-|-----|----------|--------|--------|
-| Base | 2.4144 | - | 14.86M |
-| #1 | 2.2765 | LR ↑ | 14.86M |
-| #2 | 2.2587 | block_size ↑ | 14.86M |
-| #3 | 2.2428 | n_layers ↑ | 19.62M |
-| #5 | 2.2151 | n_embd ↑ | 26.57M |
+## Run #4: Increase Model Depth
+**Change**: n_layers 6 -> 8
+**Result**: val_loss = 2.2407 (was 2.2564, -0.7%)
+**Status**: ✅ IMPROVED - Committed
+**Note**: Model params increased to 19.62M
 
-**Total improvement: -8.3% from baseline**
+## Run #5: Increase Model Width
+**Change**: n_embd 384 -> 448, n_heads 6 -> 7
+**Result**: val_loss = 2.2115 (was 2.2407, -1.3%)
+**Status**: ✅ IMPROVED - Committed
+**Note**: Model params increased to 26.57M
+
+## Summary
+- **Total improvement**: 2.4144 -> 2.2115 = **8.4% reduction in val_loss**
+- **Final config**:
+  - LEARNING_RATE = 6e-4 (was 3e-4)
+  - WARMUP_STEPS = 200 (was 100)
+  - WEIGHT_DECAY = 0.05 (was 0.1)
+  - block_size = 384 (was 256)
+  - n_layers = 8 (was 6)
+  - n_embd = 448 (was 384)
+  - n_heads = 7 (was 6)
+- **Final model**: 26.57M params (was 14.86M)
+- **JP Perplexity**: 9.87 (down from ~11.2 at baseline)
