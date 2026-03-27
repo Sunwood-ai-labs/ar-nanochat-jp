@@ -33,14 +33,28 @@
 **Note**: Model params increased to 26.57M
 
 ## Summary
-- **Total improvement**: 2.4144 -> 2.2115 = **8.4% reduction in val_loss**
+- **Total improvement**: 2.4144 -> 2.0509 = **15.1% reduction in val_loss**
 - **Final config**:
   - LEARNING_RATE = 6e-4 (was 3e-4)
   - WARMUP_STEPS = 200 (was 100)
   - WEIGHT_DECAY = 0.05 (was 0.1)
+  - MAX_STEPS = 2000 (was 1000)
   - block_size = 384 (was 256)
   - n_layers = 8 (was 6)
   - n_embd = 448 (was 384)
   - n_heads = 7 (was 6)
 - **Final model**: 26.57M params (was 14.86M)
-- **JP Perplexity**: 9.87 (down from ~11.2 at baseline)
+- **JP Perplexity**: 8.37 (down from ~11.2 at baseline)
+- **Composite score**: 2.72 (lower = better)
+
+## Progress Chart
+```
+val_loss
+2.50 |  █
+2.40 |  ██
+2.30 |  ████
+2.20 |  ██████
+2.10 |  ████████
+2.00 |  █████████
+     +--Base-#1--#2--#3--#4--#5---#7-->
+```
