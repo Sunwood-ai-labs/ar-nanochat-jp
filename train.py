@@ -44,10 +44,7 @@ GRAD_CLIP = 1.0             # Gradient clipping
 # Model overrides (BASE_CONFIG from model.py can be overridden here)
 MODEL_CONFIG = {
     **BASE_CONFIG,
-    # "n_layers": 6,       # Uncomment to override
-    # "n_embd": 384,       # Uncomment to override
-    # "n_heads": 6,        # Uncomment to override
-    # "block_size": 256,   # Uncomment to override
+    "block_size": 384,    # Increased from 256 for longer context (Run #2)
 }
 
 # Paths
