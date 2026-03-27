@@ -33,7 +33,7 @@ MIN_LR = 6e-5               # Minimum learning rate for cosine schedule (2x of p
 WARMUP_STEPS = 200          # Warmup steps before cosine decay (increased for stability at higher LR)
 MAX_STEPS = 2000            # Total training steps (doubled: 1000→2000, Run #7)
 BATCH_SIZE = 8              # Micro batch size
-GRAD_ACCUM_STEPS = 4        # Gradient accumulation steps (effective batch = 32)
+GRAD_ACCUM_STEPS = 8        # Gradient accumulation steps (effective batch = 64, doubled Run #9)
 EVAL_INTERVAL = 200         # Evaluate every N steps
 EVAL_STEPS = 50             # Steps for evaluation
 WEIGHT_DECAY = 0.05         # Weight decay for AdamW (reduced from 0.1, Run #3)
@@ -48,6 +48,7 @@ MODEL_CONFIG = {
     "n_layers": 8,        # Deeper model: 6→8 layers (Run #4)
     "n_embd": 448,        # Wider model: 384→448 (Run #5)
     "n_heads": 7,         # Adjusted for n_embd=448 (448/7=64 head_dim)
+    "dropout": 0.05,      # Reduced from 0.1 to reduce underfitting (Run #8)
 }
 
 # Paths
