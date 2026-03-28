@@ -57,6 +57,18 @@
 **Status**: ✅ IMPROVED - Committed
 **Note**: Benchmark CUDA assert error — fixed in RoPE cache. Model params increased due to larger vocab embedding.
 
+## Run #11: Extended Training 3000 Steps
+**Change**: MAX_STEPS 2000→3000
+**Result**:
+- val_loss = 2.2587 (not comparable to Run #10 due to vocab change)
+- composite_score = 2.5165
+- JP Perplexity = 8.82
+- dist_score = 0.3858 (-42.7% from old 0.6731)
+- 3-gram repetition = 0.5391 (-37.0% from old 0.8558)
+- char_diversity = 0.1507 (+394% from old 0.0305)
+**Status**: ✅ IMPROVED - Committed
+**Note**: Generation quality dramatically improved with expanded vocab. First valid Japanese benchmark.
+
 ## Summary
 - **Total improvement**: 2.4144 -> 1.9012 = **21.3% reduction in val_loss**
 - **Current config**:
