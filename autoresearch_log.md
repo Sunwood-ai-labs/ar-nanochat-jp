@@ -69,33 +69,52 @@
 **Status**: ✅ IMPROVED - Committed
 **Note**: Generation quality dramatically improved with expanded vocab. First valid Japanese benchmark.
 
+## Run #12: Extended Warmup for Larger Vocab
+**Change**: WARMUP_STEPS 200→300 (for stability with larger 21K vocab)
+**Result**:
+- val_loss = 2.2453 (was 2.2587, -0.60%)
+- composite_score = 2.4367 (was 2.5165, -3.2%)
+- JP Perplexity = 8.78 (was 8.82, -0.5%)
+- 3-gram repetition = 0.4426 (was 0.5391, -17.9%)
+- char_diversity = 0.1875 (was 0.1507, +24.3%)
+**Status**: ✅ IMPROVED - Committed + Pushed
+
+## Run #13: LR Increase 6e-4→8e-4
+**Change**: LEARNING_RATE 6e-4→8e-4, MIN_LR 6e-5→8e-5
+**Result**: val_loss=2.2453, composite=2.4367 (identical to Run #12)
+**Status**: ❌ NO CHANGE - Reverted
+
+## Run #14: Longer Warmup 300→500
+**Change**: WARMUP_STEPS 300→500
+**Result**: val_loss=2.2453, composite=2.4367 (identical to Run #12)
+**Status**: ❌ NO CHANGE - Reverted
+
 ## Summary
-- **Total improvement**: 2.4144 -> 1.9012 = **21.3% reduction in val_loss**
+- **Total improvement**: 2.4144 -> 2.2453 = **7.1% reduction in val_loss** (new vocab scale)
+- **Japanese quality**: dist_score 0.67→0.39, 3-gram rep 0.86→0.44, diversity 0.03→0.19
 - **Current config**:
   - LEARNING_RATE = 6e-4
-  - WARMUP_STEPS = 200
+  - WARMUP_STEPS = 300
   - WEIGHT_DECAY = 0.05
-  - MAX_STEPS = 2000
+  - MAX_STEPS = 3000
   - GRAD_ACCUM_STEPS = 8
   - block_size = 384
   - n_layers = 8
   - n_embd = 512
   - n_heads = 8
   - dropout = 0.05
-  - vocab_size = 21,521 (was 1,553)
-  - Positional: RoPE (was learned)
-- **JP Perplexity**: TBD (benchmark fix needed)
-- **Composite score**: 1.9012 (val_loss only, benchmark pending)
+  - vocab_size = 21,521
+  - Positional: RoPE
 
 ## Progress Chart
 ```
-val_loss
-2.50 |  █
-2.40 |  ██
-2.30 |  ████
-2.20 |  ██████
-2.10 |  ████████
-2.00 |  █████████
-1.90 |  ██████████
-     +--Base-#1--#2--#3--#4--#5---#7---#9--#10-->
+val_loss (old scale)    val_loss (new vocab scale)
+2.50 |  █               |
+2.40 |  ██              |
+2.30 |  ████             |
+2.20 |  ██████            2.25 |
+2.10 |  ████████          |
+2.00 |  █████████         |
+1.90 |  ██████████        |
+     +--Base-#1--#2--#3--#4--#5---#7---#9--#10-#11-#12-->
 ```
