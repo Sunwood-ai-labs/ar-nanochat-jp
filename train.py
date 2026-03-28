@@ -46,8 +46,8 @@ MODEL_CONFIG = {
     **BASE_CONFIG,
     "block_size": 384,    # Increased from 256 for longer context (Run #2)
     "n_layers": 8,        # Deeper model: 6→8 layers (Run #4)
-    "n_embd": 448,        # Wider model: 384→448 (Run #5)
-    "n_heads": 7,         # Adjusted for n_embd=448 (448/7=64 head_dim)
+    "n_embd": 512,        # Wider model: 448→512 (Run #10)
+    "n_heads": 8,         # Adjusted for n_embd=512 (512/8=64 head_dim, Run #10)
     "dropout": 0.05,      # Reduced from 0.1 to reduce underfitting (Run #8)
 }
 

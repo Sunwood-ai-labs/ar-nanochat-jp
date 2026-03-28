@@ -22,8 +22,8 @@ def build_vocab():
     # Katakana
     for i in range(0x30A0, 0x30FF + 1):
         chars.append(chr(i))
-    # CJK Common (Level 1 — most frequent kanji)
-    for i in range(0x4E00, 0x51FF + 1):
+    # CJK Unified Ideographs — extended to cover all Joyo + Jinmeiyo kanji
+    for i in range(0x4E00, 0x9FFF + 1):
         chars.append(chr(i))
     # Full-width symbols
     for i in range(0xFF00, 0xFFEF + 1):

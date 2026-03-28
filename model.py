@@ -22,6 +22,43 @@ class RMSNorm(nn.Module):
         return x / rms * self.weight
 
 
+class RotaryEmbedding(nn.Module):
+    """Rotary Position Embeddings (RoPE) — better length generalization than learned embeddings."""
+
+    def __init__(self, dim, max_seq_len=2048, base=10000):
+        super().__init__()
+        inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2).float() / dim))
+        self.register_buffer("inv_freq", inv_freq)
+        self._seq_len_cached = 0
+        self._build_cache(max_seq_len)
+
+    def _build_cache(self, seq_len):
+        if seq_len <= self._seq_len_cached:
+            return
+        self._seq_len_cached = seq_len
+        t = torch.arange(seq_len, device=self.inv_freq.device, dtype=self.inv_freq.dtype)
+        freqs = torch.outer(t, self.inv_freq)
+        emb = torch.cat([freqs, freqs], dim=-1)
+        self.register_buffer("cos_cached", emb.cos()[None, None, :, :], persistent=False)
+        self.register_buffer("sin_cached", emb.sin()[None, None, :, :], persistent=False)
+
+    def forward(self, x, seq_len):
+        self._build_cache(seq_len)
+        return (
+            self.cos_cached[:, :, :seq_len, :],
+            self.sin_cached[:, :, :seq_len, :],
+        )
+
+
+def rotate_half(x):
+    x1, x2 = x.chunk(2, dim=-1)
+    return torch.cat([-x2, x1], dim=-1)
+
+
+def apply_rotary_emb(x, cos, sin):
+    return x * cos + rotate_half(x) * sin
+
+
 class CausalSelfAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -34,6 +71,9 @@ class CausalSelfAttention(nn.Module):
         self.proj = nn.Linear(self.n_embd, self.n_embd, bias=False)
         self.attn_dropout = nn.Dropout(config["dropout"])
         self.resid_dropout = nn.Dropout(config["dropout"])
+
+        # RoPE — replaces learned positional embeddings
+        self.rotary_emb = RotaryEmbedding(self.head_dim, max_seq_len=max(config["block_size"], 2048))
 
         self.flash = hasattr(F, "scaled_dot_product_attention")
         if not self.flash:
@@ -50,6 +90,11 @@ class CausalSelfAttention(nn.Module):
         q = q.view(B, T, self.n_heads, self.head_dim).transpose(1, 2)
         k = k.view(B, T, self.n_heads, self.head_dim).transpose(1, 2)
         v = v.view(B, T, self.n_heads, self.head_dim).transpose(1, 2)
+
+        # Apply RoPE to q and k
+        cos, sin = self.rotary_emb(x, seq_len=T)
+        q = apply_rotary_emb(q, cos, sin)
+        k = apply_rotary_emb(k, cos, sin)
 
         if self.flash:
             y = F.scaled_dot_product_attention(
@@ -106,7 +151,6 @@ class GPT(nn.Module):
         self.block_size = config["block_size"]
 
         self.tok_emb = nn.Embedding(config["vocab_size"], config["n_embd"])
-        self.pos_emb = nn.Embedding(config["block_size"], config["n_embd"])
         self.drop = nn.Dropout(config["dropout"])
         self.blocks = nn.ModuleList([Block(config) for _ in range(config["n_layers"])])
         self.ln_f = RMSNorm(config["n_embd"])
@@ -132,8 +176,7 @@ class GPT(nn.Module):
         B, T = idx.size()
         assert T <= self.block_size
 
-        pos = torch.arange(0, T, dtype=torch.long, device=idx.device).unsqueeze(0)
-        x = self.drop(self.tok_emb(idx) + self.pos_emb(pos))
+        x = self.drop(self.tok_emb(idx))
 
         for block in self.blocks:
             x = block(x)
