@@ -1,5 +1,5 @@
 {
-  "vocab_size": 1553,
+  "vocab_size": 21521,
   "total_tokens": 50000124,
   "train_tokens": 47500118,
   "val_tokens": 2500006
